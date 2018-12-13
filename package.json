@@ -4,11 +4,11 @@
   "description": "Mock Premier League",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/adenijiayocharles/Mock-Premier-League.git"
+    "url": "https://github.com/adenijiayocharles/Mock-Premier-League.git"
   },
   "author": "Adeniji Charles Ayodipupo",
   "license": "ISC",
