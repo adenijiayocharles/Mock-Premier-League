@@ -6,9 +6,11 @@ const Admin = require("../models/adminModels");
 
 router.post("/admin/signup", (req, res) => {
     // if no data in request body
-    if(!req.body) {
-        return res.status(400).send('Request body is missing')
-    }    
+    if(Object.keys(req.body).length === 0){
+        return res.status(400).json({
+            message: "Request body is missing"
+        });
+    }   
 
     //check if email is valid
     if(!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(req.body.email))){
