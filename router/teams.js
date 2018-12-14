@@ -12,17 +12,24 @@ router.post("/team/create", (req, res) => {
     }
 
     // search if team has been added before
-    Team.find({name: req.body.name})
+    Team.find({name: (req.body.name).toLowerCase()})
     .then(team => {
         if(team.length >= 1){
             return res.status(409).json({
+                status: false,
                 message: "Team already exists"
             });
         }
     });
 
     // add team
-    let team = new Team(req.body);
+    let teamDetails = {
+        name: (req.body.name).toLowerCase(),
+        coach: req.body.coach,
+        year_founded: req.body.year_founded
+    };
+
+    let team = new Team(teamDetails);
     team.save()
     .then(result => {
         res.status(201).json({
@@ -35,12 +42,103 @@ router.post("/team/create", (req, res) => {
         res.status(500).json(err)
     })    
 });
-// edit team
-
-// delete team
 
 // view all teams
+router.get("/teams", (req, res) => {
+    Team.find()
+    .then(results => {
+        res.status(200).json({
+            status: true,
+            count: results.length,
+            teams: results.map(result => {
+                return {
+                    id: result.id,
+                    name: result.name,
+                    founded: result.year_founded
+                }
+            })
+        });
+    })
+    .catch(err => {
+        res.status(500).json({
+            status: false,
+            message: "no available teams"
+        });
+    })
+});
 
-// view single team
+// view single team by id
+router.get("/team/:id", (req, res) => {
+    Team.findById(req.params.id)
+    .then(team => {
+        return res.status(200).json({
+            status : "true",
+            team: {
+                name: team.name,
+                founded: team.year_founded,
+                coach: team.coach
+            }
+        });
+    })
+    .catch(err => {
+        return res.status(500).json({
+            status: false,
+            message: "Unable to locate team with id"
+        });            
+    })
+});
 
+// delete team
+router.delete("/team/:id", (req, res) => {
+   Team.findOneAndDelete({_id: req.params.id})
+   .then(result => {
+       res.status(200).json({
+            status: true,
+            message: "team deleted",
+       })
+   })
+   .catch(err => {
+       res.status(500).json({
+            status: false,
+            message: "invalid team id"
+       })
+   })
+});
+
+// update team details
+router.patch("/team/:id", (req, res) => {
+    Team.findOneAndUpdate({_id: req.params.id}, req.body, {})
+    .then(result => {
+        console.log(result);
+        res.status(200).json({
+            status: true,
+            message: "team details updated",
+        })
+    })
+    .catch(err => {
+        res.status(500).json({
+            status: false,
+            message: "unable to update team. Invalid team id",
+            error: err
+       })
+    })
+});
+
+router.put("/team/:id", (req, res) => {
+    Team.findOneAndUpdate({_id: req.params.id}, req.body, {})
+    .then(result => {
+        console.log(result);
+        res.status(200).json({
+            status: true,
+            message: "team details updated",
+        })
+    })
+    .catch(err => {
+        res.status(500).json({
+            status: false,
+            message: "unable to update team. Invalid team id",
+            error: err
+       })
+    })
+});
 module.exports = router;
