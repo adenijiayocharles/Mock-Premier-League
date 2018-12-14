@@ -2,23 +2,32 @@ const mongoose = require("mongoose");
 const fixtureSchema = mongoose.Schema({
     home: {
         type: String,
-        required: true
+        required: true,
+        ref: 'Team'
     },
     away: {
         type: String,
-        required: true
+        required: true,
+        ref: 'Team'
     },
-    day: {
+    stadium: {
+        type: String,
+        required: true        
+    },
+    playdate: {
         type: Date,
         required: true
     },
-    time: {
+    playtime: {
         type: String,
         required: true
     },
-    status: {
+    playstatus: {
         type: Boolean,
         default: 0
+    },
+    score: {
+        type: Object
     }
 });
 
