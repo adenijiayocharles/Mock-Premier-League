@@ -1,5 +1,10 @@
 const mongoose = require("mongoose");
 const teamSchema = mongoose.Schema({
+    teamid: {
+        type: Number,
+        required: true,
+        unique: true
+    },
     name: {
         type: String,
         unique: true,

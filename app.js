@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 // load router files
 const adminRouter = require("./router/admin");
 const teamRouter = require("./router/teams");
+const fixtureRouter = require("./router/fixtures");
 
 // connect to mongodb
 mongoose.connect("mongodb://localhost/mrp", { useNewUrlParser: true });
@@ -28,6 +29,7 @@ app.use(bodyParser.json());
 // let express use router
 app.use(adminRouter);
 app.use(teamRouter);
+app.use(fixtureRouter);
 
 // error middleware
 app.use((req, res, next) => {
