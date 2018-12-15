@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcryptjs = require("bcryptjs");
 const Admin = require("../models/adminModels");
-
+const jwt = require("jsonwebtoken");
 
 
 router.post("/admin/signup", (req, res) => {
@@ -102,11 +102,21 @@ router.post("/admin/login", (req, res) => {
                     message: "Auth failed"
                 })                
             }
-
+            // TODO create env file
             //comparison successful
             if(result){
+                // jwt here
+                const token = jwt.sign({
+                        email: admin[0].email,
+                        adminId: admin[0]._id
+                    }, "secret",
+                    {
+                        expiresIn: "1h"
+                    }
+                );
                 return res.status(200).json({
-                    message: "Auth successful"
+                    message: "Auth successful",
+                    token: token
                 })
             }
 
