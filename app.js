@@ -4,12 +4,18 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 // load router files
+//admin
 const adminRouter = require("./router/admin/admin");
 const teamRouter = require("./router/admin/teams");
 const fixtureRouter = require("./router/admin/fixtures");
 
+//user
+const userRouter = require("./router/users/user");
+const userTeam = require("./router/users/teams");
+
 // connect to mongodb
-mongoose.connect("mongodb://localhost/mrp", { useNewUrlParser: true });
+// mongoose.connect("mongodb://localhost/mrp", { useNewUrlParser: true });
+mongoose.connect("mongodb://charles:windscreen1@ds253353.mlab.com:53353/mrp", { useNewUrlParser: true });
 mongoose.set('useCreateIndex', true);
 
 // configure express to use bodyParser json method
@@ -30,6 +36,8 @@ app.use(bodyParser.json());
 app.use(adminRouter);
 app.use(teamRouter);
 app.use(fixtureRouter);
+app.use(userRouter);
+app.use(userTeam);
 
 // error middleware
 app.use((req, res, next) => {

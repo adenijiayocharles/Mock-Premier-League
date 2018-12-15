@@ -1,28 +1,27 @@
 const express = require("express");
 const router = express.Router();
-const bcryptjs = require("bcryptjs");
-const Admin = require("../../models/admin/adminModels");
 const jwt = require("jsonwebtoken");
+const bcryptjs = require("bcryptjs");
+const User = require("../../models/users/userModel");
 
 
-router.post("/admin/signup", (req, res) => {
+router.post("/users/signup", (req, res) => {
     if(req.body.name === undefined){
         return res.status(400).json({
-            message: "Admin name can not be empty"
-        });        
+            message: "name field can't be empty"
+        });
     }
-
 
     if(req.body.email === undefined){
         return res.status(400).json({
-            message: "Email address can not be empty"
-        });        
-    }  
-    
+            message: "email field can't be empty"
+        });
+    }    
+
     if(req.body.password === undefined){
         return res.status(400).json({
-            message: "Password can not be empty"
-        });        
+            message: "password field can't be empty"
+        });
     }    
 
     //check if email is valid
@@ -30,20 +29,20 @@ router.post("/admin/signup", (req, res) => {
         return res.status(400).send({
             message: "Invalid email address"
         });
-    }
+    }    
 
-    // search if email is already registered
-    Admin.find({email: req.body.email})
-    .then(admin => {
-        if(admin.length >= 1){
+    //search if registered before
+    User.find({email: req.body.email})
+    .then(user => {
+        if(user.length >= 1){
             return res.status(409).json({
                 status: false,
-                message: "Email already exists"
+                message: "User already exists"
             });
         }
     })
 
-    // if admin does not exist, store details
+    // if user does not exist, store details
     bcryptjs.hash(req.body.password, 10, (err, hash) => {
         if(err) {
             return res.status(500).json({
@@ -51,7 +50,7 @@ router.post("/admin/signup", (req, res) => {
                 error: err
             });
         }else{
-            let admin = new Admin({
+            let admin = new User({
                 name: req.body.name,
                 email: req.body.email,
                 password: hash
@@ -60,7 +59,7 @@ router.post("/admin/signup", (req, res) => {
             .then(result => {
                 res.status(200).json({
                     status: true,
-                    message: "Admin details created"
+                    message: "User details created"
                 });
             })
             .catch(err => {
@@ -68,10 +67,10 @@ router.post("/admin/signup", (req, res) => {
                 res.status(500).json(err)
             })
         }
-    })
+    })    
 });
 
-router.post("/admin/login", (req, res) => {
+router.post("/users/login", (req, res) => {
 
     if(req.body.email === undefined){
         return res.status(400).json({
@@ -85,16 +84,16 @@ router.post("/admin/login", (req, res) => {
         });        
     }
 
-    Admin.find({email: req.body.email})
-    .then(admin => {
-        if(admin.length < 1){
+    User.find({email: req.body.email})
+    .then(user => {
+        if(user.length < 1){
             res.status(401).json({
                 status: false,
                 message: "Auth failed"
             })
         }
 
-        bcryptjs.compare(req.body.password, admin[0].password, (err, result) => {
+        bcryptjs.compare(req.body.password, user[0].password, (err, result) => {
             // comparison failed
             if(err){
                 res.status(401).json({
@@ -102,14 +101,13 @@ router.post("/admin/login", (req, res) => {
                     message: "Auth failed"
                 })                
             }
-            // TODO create env file
             //comparison successful
             if(result){
                 // jwt here
                 const token = jwt.sign({
-                        email: admin[0].email,
-                        adminId: admin[0]._id
-                    }, "secret",
+                        email: user[0].email,
+                        userId: user[0]._id
+                    }, "usersecret",
                     {
                         expiresIn: "1h"
                     }
