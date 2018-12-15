@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Fixture = require("../models/fixturesModels");
+const checkAdminAuth = require("../middleware/adminAuth");
 
 // create fixture
-router.post("/fixture", (req, res) => {
+router.post("/fixtures", checkAdminAuth, (req, res) => {
     if(Object.keys(req.body).length === 0){
         return res.status(400).json({
             message: "request body is missing"
@@ -29,7 +30,7 @@ router.post("/fixture", (req, res) => {
 });
 
 // get all fixtures
-router.get("/fixture", (req, res) => {
+router.get("/fixtures", checkAdminAuth, (req, res) => {
     Fixture.find()
     .then(fixtures => {
         if(fixtures.length === 0){
@@ -54,7 +55,13 @@ router.get("/fixture", (req, res) => {
 });
 
 //get single fixture
-router.get("/fixture/:id", (req, res) => {
+router.get("/fixtures/:id", checkAdminAuth, (req, res) => {
+    if(req.params.id === undefined){
+        return res.status(400).json({
+            message: "id param can not be empty"
+        });        
+    }
+
     Fixture.findOne({_id: req.params.id})
     .then(result => {
         res.status(200).json({
@@ -82,9 +89,14 @@ router.get("/fixture/:id", (req, res) => {
     })
 });
 
-
 // delete fixture
-router.delete("/fixture/:id", (req, res) => {
+router.delete("/fixtures/:id", checkAdminAuth, (req, res) => {
+    if(req.params.id === undefined){
+        return res.status(400).json({
+            message: "id param can not be empty"
+        });        
+    }
+
     Fixture.findOneAndDelete({_id: req.params.id})
     .then(result => {
         res.status(200).json({
@@ -101,7 +113,31 @@ router.delete("/fixture/:id", (req, res) => {
 });
 
 //update scores and play status
-router.patch("/fixture/score/:id", (req, res) => {
+router.put("/fixtures/score/:id", checkAdminAuth, (req, res) => {
+    if(req.params.id === undefined){
+        return res.status(400).json({
+            message: "id param can not be empty"
+        });        
+    }
+
+    if(req.body.status === undefined){
+        return res.status(400).json({
+            message: "Status field can not be empty"
+        });        
+    }    
+
+    if(req.body.home === undefined){
+        return res.status(400).json({
+            message: "home score field can not be empty"
+        });        
+    }        
+
+    if(req.body.away === undefined){
+        return res.status(400).json({
+            message: "away score field can not be empty"
+        });        
+    }            
+
     let score = {
         playstatus: req.body.status,
         score: {
@@ -122,5 +158,36 @@ router.patch("/fixture/score/:id", (req, res) => {
             message: "unable to update fixture"
         })
     })
-})
+});
+
+//update play date
+router.put("/fixtures/date/:id", checkAdminAuth, (req, res) => {
+    if(req.params.id === undefined){
+        return res.status(400).json({
+            message: "id param can not be empty"
+        });        
+    }
+
+
+    if(req.body.playdate === undefined){
+        return res.status(400).json({
+            message: "playdate field can not be empty"
+        });        
+    }
+
+    Fixture.findOneAndUpdate({_id: req.params.id }, req.body, {})
+    .then(results => {
+        res.status(200).json({
+            status: true,
+            message: "fixture date updated"
+        })
+    })
+    .catch(err => {
+        res.status(400).json({
+            status: false,
+            message: "unable to update fixture date"
+        })
+    })
+});
+
 module.exports = router;

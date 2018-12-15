@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const Team = require("../models/teamModels");
+const checkAdminAuth = require("../middleware/adminAuth");
 
 
 // save team
-router.post("/team", (req, res) => {
+router.post("/teams", checkAdminAuth, (req, res) => {
     if(Object.keys(req.body).length === 0){
         return res.status(400).json({
             message: "Request body is missing"
@@ -56,7 +57,7 @@ router.post("/team", (req, res) => {
 });
 
 // view all teams
-router.get("/team", (req, res) => {
+router.get("/teams", checkAdminAuth, (req, res) => {
     Team.find()
     .then(results => {
         res.status(200).json({
@@ -81,7 +82,7 @@ router.get("/team", (req, res) => {
 });
 
 // view single team by id
-router.get("/team/:id", (req, res) => {
+router.get("/teams/:id", checkAdminAuth, (req, res) => {
     Team.findOne({teamid: req.params.id})
     .then(team => {
         return res.status(200).json({
@@ -103,7 +104,7 @@ router.get("/team/:id", (req, res) => {
 });
 
 // delete team
-router.delete("/team/:id", (req, res) => {
+router.delete("/teams/:id", checkAdminAuth, (req, res) => {
    Team.findOneAndDelete({teamid: req.params.id})
    .then(result => {
        res.status(200).json({
@@ -120,7 +121,7 @@ router.delete("/team/:id", (req, res) => {
 });
 
 // update team details
-router.patch("/team/:id", (req, res) => {
+router.patch("/teams/:id", checkAdminAuth, (req, res) => {
     Team.findOneAndUpdate({teamid: req.params.id}, req.body, {})
     .then(result => {
         console.log(result);
@@ -138,8 +139,8 @@ router.patch("/team/:id", (req, res) => {
     })
 });
 
-router.put("/team/:id", (req, res) => {
-    Team.findOneAndUpdate({teamid: req.params.id}, req.body, {})
+router.put("/teams/:id", checkAdminAuth, (req, res) => {
+    Team.findOneAndUpdate({teamid: req.params.id}, req.body, { new: true})
     .then(result => {
         console.log(result);
         res.status(200).json({
@@ -155,4 +156,5 @@ router.put("/team/:id", (req, res) => {
        })
     })
 });
+
 module.exports = router;
