@@ -12,9 +12,10 @@ const fixtureRouter = require("./router/admin/fixtures");
 //user
 const userRouter = require("./router/users/user");
 const userTeam = require("./router/users/teams");
+const userFixtures = require("./router/users/fixtures");
 
 // connect to mongodb
-// mongoose.connect("mongodb://localhost/mrp", { useNewUrlParser: true });
+//mongoose.connect("mongodb://localhost/mrp", { useNewUrlParser: true });
 mongoose.connect("mongodb://charles:windscreen1@ds253353.mlab.com:53353/mrp", { useNewUrlParser: true });
 mongoose.set('useCreateIndex', true);
 
@@ -22,15 +23,15 @@ mongoose.set('useCreateIndex', true);
 app.use(bodyParser.json());
 
 // cors
-// app.use((req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-//     if(req.method === "OPTIONS"){
-//         res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
-//         return res.status(200).json({});
-//     }
-//     next();
-// });
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    if(req.method === "OPTIONS"){
+        res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+        return res.status(200).json({});
+    }
+    next();
+});
 
 // let express use router
 app.use(adminRouter);
@@ -38,6 +39,7 @@ app.use(teamRouter);
 app.use(fixtureRouter);
 app.use(userRouter);
 app.use(userTeam);
+app.use(userFixtures);
 
 // error middleware
 app.use((req, res, next) => {
