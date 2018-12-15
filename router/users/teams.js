@@ -4,7 +4,7 @@ const Team = require("../../models/admin/teamModels");
 const checkUserAuth = require("../../middleware/userAuth");
 
 
-router.get("/users/teams", (req, res) => {
+router.get("/users/teams", checkUserAuth, (req, res) => {
     console.log(req.url);
     Team.find()
     .then(results => {
@@ -30,7 +30,7 @@ router.get("/users/teams", (req, res) => {
 });
 
 // view single team by id
-router.get("/users/teams/:id", (req, res) => {
+router.get("/users/teams/:id", checkUserAuth,(req, res) => {
     console.log(req.url);
     console.log(req.params.id);
     Team.findOne({teamid: req.params.id})

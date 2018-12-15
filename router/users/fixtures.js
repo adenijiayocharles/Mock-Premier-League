@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Fixture = require("../../models/admin/fixturesModels");
+const checkUserAuth = require("../../middleware/userAuth");
 
-router.get("/users/fixtures", (req, res) => {
+router.get("/users/fixtures", checkUserAuth, (req, res) => {
     Fixture.find()
     .then(fixtures => {
         if(fixtures.length === 0){
@@ -25,7 +26,7 @@ router.get("/users/fixtures", (req, res) => {
     })
 });
 
-router.get("/users/fixtures/complete", (req, res) => {
+router.get("/users/fixtures/complete", checkUserAuth, (req, res) => {
     Fixture.find({playstatus: true})
     .then(fixtures => {
         if(fixtures.length === 0){
@@ -48,7 +49,7 @@ router.get("/users/fixtures/complete", (req, res) => {
     })
 });
 
-router.get("/users/fixtures/pending", (req, res) => {
+router.get("/users/fixtures/pending", checkUserAuth, (req, res) => {
     Fixture.find({playstatus: false})
     .then(fixtures => {
         if(fixtures.length === 0){
