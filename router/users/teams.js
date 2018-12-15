@@ -53,4 +53,28 @@ router.get("/users/teams/:id", checkUserAuth,(req, res) => {
     })
 });
 
+
+// name search with query
+router.get("/users/teams/name/:q", checkUserAuth,(req, res) => {
+    Team.findOne({name: new RegExp('^'+req.params.q+'$', "i")})
+    // Team.findOne({name: "chelsea fc"})
+    // Team.findOne({name: req.query.name })
+    .then(team => {
+        return res.status(200).json({
+            status : "true",
+            team: {
+                id: team.teamid,
+                name: team.name,
+                founded: team.year_founded,
+                coach: team.coach
+            }
+        });
+    })
+    .catch(err => {
+        return res.status(500).json({
+            status: false,
+            message: `Unable to locate team with name ${req.params.q}`
+        });            
+    })
+});
 module.exports = router;
