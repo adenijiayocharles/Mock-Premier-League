@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const Fixture = require("../models/fixturesModels");
-const checkAdminAuth = require("../middleware/adminAuth");
+const Fixture = require("../../models/admin/fixturesModels");
+const checkAdminAuth = require("../../middleware/adminAuth");
 
 // create fixture
 router.post("/fixtures", checkAdminAuth, (req, res) => {

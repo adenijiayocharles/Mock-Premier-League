@@ -4,9 +4,9 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 // load router files
-const adminRouter = require("./router/admin");
-const teamRouter = require("./router/teams");
-const fixtureRouter = require("./router/fixtures");
+const adminRouter = require("./router/admin/admin");
+const teamRouter = require("./router/admin/teams");
+const fixtureRouter = require("./router/admin/fixtures");
 
 // connect to mongodb
 mongoose.connect("mongodb://localhost/mrp", { useNewUrlParser: true });

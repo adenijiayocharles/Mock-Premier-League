@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const Team = require("../models/teamModels");
-const checkAdminAuth = require("../middleware/adminAuth");
+const Team = require("../../models/admin/teamModels");
+const checkAdminAuth = require("../../middleware/adminAuth");
 
 
 // save team
