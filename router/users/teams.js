@@ -53,7 +53,6 @@ router.get("/users/teams/:id", checkUserAuth,(req, res) => {
     })
 });
 
-
 // name search with query
 router.get("/users/teams/name/:q", checkUserAuth,(req, res) => {
     Team.findOne({name: new RegExp('^'+req.params.q+'$', "i")})

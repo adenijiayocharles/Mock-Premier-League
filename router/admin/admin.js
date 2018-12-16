@@ -111,7 +111,7 @@ router.post("/admin/login", (req, res) => {
                         adminId: admin[0]._id
                     }, "secret",
                     {
-                        expiresIn: "1h"
+                        expiresIn: "3h"
                     }
                 );
                 return res.status(200).json({

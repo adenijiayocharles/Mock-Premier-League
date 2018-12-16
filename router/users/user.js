@@ -109,7 +109,7 @@ router.post("/users/login", (req, res) => {
                         userId: user[0]._id
                     }, "secret",
                     {
-                        expiresIn: "1h"
+                        expiresIn: "3h"
                     }
                 );
                 return res.status(200).json({

@@ -3,6 +3,7 @@ const router = express.Router();
 const Fixture = require("../../models/admin/fixturesModels");
 const checkUserAuth = require("../../middleware/userAuth");
 
+
 router.get("/users/fixtures", checkUserAuth, (req, res) => {
     Fixture.find()
     .then(fixtures => {
@@ -71,5 +72,6 @@ router.get("/users/fixtures/pending", checkUserAuth, (req, res) => {
         });
     })
 });
+
 
 module.exports = router;
