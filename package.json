@@ -4,7 +4,8 @@
   "description": "Mock Premier League",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app"
+    "start": "nodemon app",
+    "test": "mocha --timeout 10000 ./test"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "faker": "^4.1.0",
     "mocha": "^5.2.0",
     "superagent": "^4.0.0",
     "supertest": "^3.3.0"

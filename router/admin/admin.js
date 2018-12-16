@@ -58,14 +58,17 @@ router.post("/admin/signup", (req, res) => {
             });
             admin.save()
             .then(result => {
-                res.status(200).json({
+                return res.status(200).json({
                     status: true,
+                    result: result,
                     message: "Admin details created"
                 });
             })
             .catch(err => {
-                status: false,
-                res.status(500).json(err)
+                return res.status(500).json({
+                    status: false,
+                    error: err  
+                })
             })
         }
     })

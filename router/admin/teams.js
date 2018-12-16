@@ -45,14 +45,16 @@ router.post("/teams", checkAdminAuth, (req, res) => {
     let team = new Team(teamDetails);
     team.save()
     .then(result => {
-        res.status(200).json({
+        return res.status(200).json({
             status: true,
             message: "Team created successfully",
         });
     })
     .catch(err => {
-        console.log(err.code);
-        res.status(500).json(err)
+        return res.status(500).json({
+            status: false,
+            error: err
+        })
     })    
 });
 
@@ -80,7 +82,7 @@ router.get("/teams", checkAdminAuth, (req, res) => {
         });
     })
     .catch(err => {
-        res.status(404).json({
+        return res.status(404).json({
             status: false,
             message: "no available teams"
         });
@@ -126,7 +128,7 @@ router.delete("/teams/:id", checkAdminAuth, (req, res) => {
        })
    })
    .catch(err => {
-       res.status(404).json({
+       return res.status(404).json({
             status: false,
             message: `invalid team id ${req.params.id}`
        })
@@ -144,7 +146,7 @@ router.patch("/teams/:id", checkAdminAuth, (req, res) => {
         })
     })
     .catch(err => {
-        res.status(500).json({
+        return res.status(500).json({
             status: false,
             message: `unable to update team. Invalid team id ${req.params.id} `,
             error: err
