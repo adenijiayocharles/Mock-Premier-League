@@ -21,7 +21,7 @@ router.get("/users/fixtures", checkUserAuth, (req, res) => {
         })
     })
     .catch(err => {
-        return res.status(400).json({
+        return res.status(500).json({
             error: err
         });
     })
@@ -44,7 +44,7 @@ router.get("/users/fixtures/complete", checkUserAuth, (req, res) => {
         })
     })
     .catch(err => {
-        return res.status(400).json({
+        return res.status(500).json({
             error: err
         });
     })
@@ -67,7 +67,7 @@ router.get("/users/fixtures/pending", checkUserAuth, (req, res) => {
         })
     })
     .catch(err => {
-        return res.status(400).json({
+        return res.status(500).json({
             error: err
         });
     })

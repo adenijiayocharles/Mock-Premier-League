@@ -45,7 +45,7 @@ router.post("/teams", checkAdminAuth, (req, res) => {
     let team = new Team(teamDetails);
     team.save()
     .then(result => {
-        res.status(201).json({
+        res.status(200).json({
             status: true,
             message: "Team created successfully",
         });
@@ -60,6 +60,12 @@ router.post("/teams", checkAdminAuth, (req, res) => {
 router.get("/teams", checkAdminAuth, (req, res) => {
     Team.find()
     .then(results => {
+        if(results.length === 0){
+            return res.status(404).json({
+                status: false,
+                message: "there are currently no teams"
+            })            
+        }
         res.status(200).json({
             status: true,
             count: results.length,
@@ -74,7 +80,7 @@ router.get("/teams", checkAdminAuth, (req, res) => {
         });
     })
     .catch(err => {
-        res.status(500).json({
+        res.status(404).json({
             status: false,
             message: "no available teams"
         });
@@ -85,6 +91,13 @@ router.get("/teams", checkAdminAuth, (req, res) => {
 router.get("/teams/:id", checkAdminAuth, (req, res) => {
     Team.findOne({teamid: req.params.id})
     .then(team => {
+        if(team.length === 0){
+            return res.status(404).json({
+                status: false,
+                message: `there are currently no team with id ${req.params.id}`
+            })            
+        }        
+        
         return res.status(200).json({
             status : "true",
             team: {
@@ -96,7 +109,7 @@ router.get("/teams/:id", checkAdminAuth, (req, res) => {
         });
     })
     .catch(err => {
-        return res.status(500).json({
+        return res.status(494).json({
             status: false,
             message: `Unable to locate team with id ${req.params.id}`
         });            
@@ -113,7 +126,7 @@ router.delete("/teams/:id", checkAdminAuth, (req, res) => {
        })
    })
    .catch(err => {
-       res.status(500).json({
+       res.status(404).json({
             status: false,
             message: `invalid team id ${req.params.id}`
        })

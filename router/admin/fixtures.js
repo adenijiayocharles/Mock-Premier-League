@@ -21,7 +21,7 @@ router.post("/fixtures", checkAdminAuth, (req, res) => {
         })
     })
     .catch(err => {
-        return res.status(400).json({
+        return res.status(500).json({
             status: false,
             message: "Unable to create new fixture",
             error: err
@@ -82,7 +82,7 @@ router.get("/fixtures/:id", checkAdminAuth, (req, res) => {
         })
     })
     .catch(err => {
-        res.status(400).json({
+        res.status(404).json({
             status: false,
             message: `Unable to find team with id ${req.params.id}`
         })
@@ -105,7 +105,7 @@ router.delete("/fixtures/:id", checkAdminAuth, (req, res) => {
         })
     })
     .catch(err => {
-        res.status(400).json({
+        res.status(404).json({
             status: false,
             message: `unable to delete fixture with id ${req.params.id}`
         })

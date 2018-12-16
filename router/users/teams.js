@@ -8,6 +8,13 @@ router.get("/users/teams", checkUserAuth, (req, res) => {
     console.log(req.url);
     Team.find()
     .then(results => {
+        if(results.length === 0){
+            return res.status(404).json({
+                status: false,
+                message: "there are currently no team"
+            });            
+        }     
+
         res.status(200).json({
             status: true,
             count: results.length,
@@ -31,10 +38,15 @@ router.get("/users/teams", checkUserAuth, (req, res) => {
 
 // view single team by id
 router.get("/users/teams/:id", checkUserAuth,(req, res) => {
-    console.log(req.url);
-    console.log(req.params.id);
     Team.findOne({teamid: req.params.id})
     .then(team => {
+        if(team.length === 0){
+            return res.status(404).json({
+                status: false,
+                message: `there are currently no team with id ${req.params.id}`
+            })
+        }   
+
         return res.status(200).json({
             status : "true",
             team: {
@@ -56,9 +68,14 @@ router.get("/users/teams/:id", checkUserAuth,(req, res) => {
 // name search with query
 router.get("/users/teams/name/:q", checkUserAuth,(req, res) => {
     Team.findOne({name: new RegExp('^'+req.params.q+'$', "i")})
-    // Team.findOne({name: "chelsea fc"})
-    // Team.findOne({name: req.query.name })
     .then(team => {
+        if(team.length === 0){
+            return res.status(404).json({
+                status: false,
+                message: "there are currently no team"
+            })
+        }           
+        
         return res.status(200).json({
             status : "true",
             team: {
