@@ -15,8 +15,8 @@ const userTeam = require("./router/users/teams");
 const userFixtures = require("./router/users/fixtures");
 
 // connect to mongodb
-mongoose.connect("mongodb://localhost/mrp", { useNewUrlParser: true });
-//mongoose.connect("mongodb://charles:windscreen1@ds253353.mlab.com:53353/mrp", { useNewUrlParser: true });
+//mongoose.connect("mongodb://localhost/mrp", { useNewUrlParser: true });
+mongoose.connect("mongodb://charles:windscreen1@ds253353.mlab.com:53353/mrp", { useNewUrlParser: true });
 mongoose.set('useCreateIndex', true);
 
 // configure express to use bodyParser json method
